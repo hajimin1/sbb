@@ -1,8 +1,10 @@
 package com.mygroup.sbb.user;
 
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import com.mygroup.sbb.DataNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,5 +22,14 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(password));
         this.userRepository.save(user);
         return user;
+    }
+
+    public SiteUser getUser(String username) {
+        Optional<SiteUser> siteUser = this.userRepository.findByusername(username);
+        if (siteUser.isPresent()) {
+            return siteUser.get();
+        } else { // 유저 정보가 없다면
+            throw new DataNotFoundException("siteuser not found");
+        }
     }
 }
