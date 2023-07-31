@@ -28,6 +28,10 @@ public class SecurityConfig {
             .formLogin((formLogin) -> formLogin
                 .loginPage("/user/login")
                 .defaultSuccessUrl("/"))
+            .logout((logout) -> logout
+                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")) // 요청 확인
+                .logoutSuccessUrl("/") // 루트페이지로 보냄
+                .invalidateHttpSession(true)) // 세션 만료. 다시 로그인하면 다시 세션 토큰을 줌
         ;
         return http.build();
     }
@@ -37,7 +41,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean // 유저가 이 페이지에 접근할 수 있는지 비교
+    @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
