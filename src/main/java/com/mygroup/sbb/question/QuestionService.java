@@ -1,5 +1,6 @@
 package com.mygroup.sbb.question;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import com.mygroup.sbb.DataNotFoundException;
@@ -13,6 +14,14 @@ import lombok.RequiredArgsConstructor;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+
+    public void create(String subject, String content) {
+        Question q = new Question(); // 객체 생성
+        q.setSubject(subject);
+        q.setContent(content);
+        q.setCreateDate(LocalDateTime.now());
+        this.questionRepository.save(q); // 저장
+    }
 
     public List<Question> getList() {
         return this.questionRepository.findAll(); // 레포지토리가 실행해서 나오는 값을 넘겨줌
